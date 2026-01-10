@@ -1,29 +1,28 @@
 import pandas as pd
-from PyPDF2 import PdfWriter
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
 
-# Lê os dados do arquivo CSV
+# Ler os dados do CSV
 dados = pd.read_csv("dados.csv")
 
-# Cria o objeto PDF
-pdf = PdfWriter()
+# Criar o PDF
+pdf = canvas.Canvas("relatorio.pdf", pagesize=A4)
+largura, altura = A4
 
-# Cria uma página em branco (tamanho A4)
-pdf.add_blank_page(width=595, height=842)
+# Título
+pdf.setFont("Helvetica-Bold", 16)
+pdf.drawString(50, altura - 50, "Relatório Automático")
 
-pagina = pdf.pages[0]
+# Conteúdo
+pdf.setFont("Helvetica", 12)
+y = altura - 100
 
-# Texto inicial do relatório
-texto = "RELATÓRIO AUTOMÁTICO\n\n"
-
-# Adiciona os dados do CSV ao texto
 for index, row in dados.iterrows():
-    texto += f"Nome: {row['Nome']} | Valor: R$ {row['Valor']}\n"
+    linha = f"Nome: {row['Nome']} | Valor: R$ {row['Valor']}"
+    pdf.drawString(50, y, linha)
+    y -= 20
 
-# Insere o texto no PDF
-pagina.insert_text(texto, 50, 800)
+# Finalizar PDF
+pdf.save()
 
-# Salva o arquivo PDF
-with open("relatorio.pdf", "wb") as arquivo:
-    pdf.write(arquivo)
-
-print("Relatório em PDF gerado com sucesso!")
+print("Relatório gerado com sucesso!")
