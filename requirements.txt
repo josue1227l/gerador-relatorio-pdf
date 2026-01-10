@@ -1,2 +1,2 @@
 pandas
-PyPDF2
+reportlab
