@@ -8,7 +8,7 @@ Automatizar a criação de relatórios, evitando processos manuais.
 ## Tecnologias utilizadas
 - Python
 - Pandas
-- PyPDF2
+- ReportLab
 
 ## Como executar o projeto
 1. Instale as dependências:
