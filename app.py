@@ -26,10 +26,7 @@ for _, row in dados.iterrows():
     c.drawString(50, y, f"Nome: {row['Nome']} - Valor: R$ {row['Valor']}")
     y -= 20
 
-y -= 10
-c.line(50, y, largura - 50, y)
-
-y -= 30
+y -= 20
 c.setFont("Helvetica-Bold", 12)
 c.drawString(50, y, f"Total gerado: R$ {total:.2f}")
 
