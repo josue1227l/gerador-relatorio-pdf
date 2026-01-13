@@ -1,28 +1,38 @@
 import pandas as pd
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
+from datetime import date
 
-# Ler os dados do CSV
 dados = pd.read_csv("dados.csv")
 
-# Criar o PDF
-pdf = canvas.Canvas("relatorio.pdf", pagesize=A4)
+total = dados["Valor"].sum()
+
+arquivo_pdf = "relatorio.pdf"
+
+c = canvas.Canvas(arquivo_pdf, pagesize=A4)
 largura, altura = A4
 
-# Título
-pdf.setFont("Helvetica-Bold", 16)
-pdf.drawString(50, altura - 50, "Relatório Automático")
+c.setFont("Helvetica-Bold", 16)
+c.drawString(50, altura - 50, "Relatório Automático")
 
-# Conteúdo
-pdf.setFont("Helvetica", 12)
-y = altura - 100
+c.setFont("Helvetica", 10)
+data_hoje = date.today().strftime("%d/%m/%Y")
+c.drawString(50, altura - 80, f"Data de geração: {data_hoje}")
 
-for index, row in dados.iterrows():
-    linha = f"Nome: {row['Nome']} | Valor: R$ {row['Valor']}"
-    pdf.drawString(50, y, linha)
+y = altura - 120
+c.setFont("Helvetica", 11)
+
+for _, row in dados.iterrows():
+    c.drawString(50, y, f"Nome: {row['Nome']} - Valor: R$ {row['Valor']}")
     y -= 20
 
-# Finalizar PDF
-pdf.save()
+y -= 10
+c.line(50, y, largura - 50, y)
+
+y -= 30
+c.setFont("Helvetica-Bold", 12)
+c.drawString(50, y, f"Total gerado: R$ {total:.2f}")
+
+c.save()
 
 print("Relatório gerado com sucesso!")
